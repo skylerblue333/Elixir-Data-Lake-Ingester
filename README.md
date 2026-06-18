@@ -1,0 +1,1 @@
+# Elixir-Data-Lake-Ingester\n\n## Overview\nEnterprise-grade data lake ingester implementation in Elixir.\n\n## Quick Start (1-Click Build)\n\n```bash\ngit clone https://github.com/skylerblue333/Elixir-Data-Lake-Ingester.git\ncd Elixir-Data-Lake-Ingester\n# Build instructions depend on the language\n```\n
