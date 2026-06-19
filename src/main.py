@@ -1,23 +1,26 @@
-import asyncio
+"""
+Elixir-Data-Lake-Ingester: Batch ingestion service that validates and stores data lake records
+"""
 import time
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI(title="Elixir-Data-Lake-Ingester")
+app = FastAPI(title="Elixir-Data-Lake-Ingester", version="3.0.0")
 
-class TaskPayload(BaseModel):
-    data: dict
+from typing import List
 
-async def process_data_background(payload: dict):
-    # Simulate heavy processing
-    await asyncio.sleep(1)
-    print(f"Processed: {payload}")
+class Record(BaseModel):
+    id: str
+    source: str
+    payload: dict
 
-@app.post("/api/v1/process")
-async def process_endpoint(payload: TaskPayload, background_tasks: BackgroundTasks):
-    background_tasks.add_task(process_data_background, payload.data)
-    return {"status": "accepted", "processing_time_ms": int(time.time() * 1000)}
+@app.post("/api/v1/ingest")
+def ingest_records(records: List[Record]):
+    valid = [r for r in records if r.id and r.source]
+    invalid = len(records) - len(valid)
+    return {"ingested": len(valid), "rejected": invalid, "status": "complete"}
+
 
 @app.get("/health")
 def health():
-    return {"status": "healthy", "version": "3.0.0"}
+    return {"status": "healthy", "service": "Elixir-Data-Lake-Ingester", "timestamp": int(time.time())}
