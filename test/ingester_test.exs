@@ -21,6 +21,9 @@ defmodule SkyDataLake.IngesterTest do
 
   test "rejects unsafe source and oversized payload" do
     assert_raise ArgumentError, fn -> Ingester.ingest(Ingester.new(), "bad source", "payload") end
-    assert_raise ArgumentError, fn -> Ingester.ingest(Ingester.new(), "source", :binary.copy("x", 262_145)) end
+
+    assert_raise ArgumentError, fn ->
+      Ingester.ingest(Ingester.new(), "source", :binary.copy("x", 262_145))
+    end
   end
 end
