@@ -4,6 +4,9 @@ defmodule SkyDataLake.CLI do
   def main(_args) do
     state = Ingester.new()
     {:ok, :accepted, event, state} = Ingester.ingest(state, "smoke", "hello")
-    IO.puts("{\"service\":\"sky-data-lake-ingester\",\"status\":\"ready\",\"events\":#{Ingester.count(state)},\"id\":\"#{event.id}\"}")
+
+    IO.puts(
+      "{\"service\":\"sky-data-lake-ingester\",\"status\":\"ready\",\"events\":#{Ingester.count(state)},\"id\":\"#{event.id}\"}"
+    )
   end
 end
