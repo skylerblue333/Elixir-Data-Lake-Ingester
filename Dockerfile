@@ -4,9 +4,8 @@ COPY mix.exs ./
 COPY lib ./lib
 RUN mix escript.build
 
-FROM alpine:3.22
-RUN apk add --no-cache libstdc++ ncurses-libs openssl \
-    && addgroup -g 10001 appuser \
+FROM elixir:1.17-alpine
+RUN addgroup -g 10001 appuser \
     && adduser -D -u 10001 -G appuser appuser
 WORKDIR /app
 COPY --from=builder /workspace/sky_data_lake /app/sky_data_lake
