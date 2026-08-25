@@ -1,44 +1,37 @@
-<!-- PORTFOLIO PROJECT PROFILE: maintained by the repository owner -->
+# Sky Data Lake Ingester (Elixir)
 
-## Project profile and code-audit snapshot
+**Status: engineering beta.** This repository is a focused Elixir ingestion primitive. It accepts bounded source/payload pairs, computes SHA-256 metadata, deduplicates identical source+payload events, and maintains a bounded in-memory catalog for deterministic processing tests.
 
-**What this is:** **Elixir-Data-Lake-Ingester** is a public repository described as: “Enterprise-grade data lake ingester implementation in Elixir. #SkyCoin4444 #AI #Blockchain #DevOps #Innovation” Its dominant language signals are **Python (4 files)**.
+## Implemented
 
-**Why it has value:** Its value is best understood through the implementation evidence currently present in the repository: **18 tracked files** were observed in the shallow audit, with the source structure and existing documentation providing the project’s specific context. This README does not treat a prototype, experiment, or archive as a production system without supporting evidence.
+- real Elixir 1.17 project with no third-party runtime dependencies
+- source validation (1–64 safe characters)
+- payload limit of 256 KiB
+- maximum 10,000 in-memory events
+- SHA-256 payload metadata
+- deterministic duplicate detection using source + payload digest
+- ExUnit tests
+- `mix format --check-formatted`
+- warnings-as-errors compilation
+- escript packaging
+- non-root container and CI smoke execution
 
-**Implementation evidence:** 2 test-related file(s) detected; 2 dependency or package manifest(s) detected; 2 build/CI/infrastructure signal(s) detected; and 3 documentation or governance file(s) detected. Test filenames observed include `tests/__init__.py`, `tests/test_main.py`. Dependency or package files include `package.json`, `requirements.txt`. Build, CI, or infrastructure signals include `Dockerfile`, `.github/workflows/ci.yml`.
+## Build and test
 
-**Current status:** The repository is tracked on the `main` branch. The existing source tree, configuration, tests, workflows, and documentation remain authoritative for supported behavior and maturity. A code audit is not a production-readiness certification, and the presence of a test or workflow file does not establish that all checks pass.
+```bash
+mix format --check-formatted
+mix compile --warnings-as-errors
+mix test
+mix escript.build
+./sky_data_lake
+```
 
-**Relationship to the wider portfolio:** This repository is one focused component of the broader Skyler Blue Spillers portfolio across AI, software engineering, cloud and DevOps, cybersecurity, blockchain, finance, education, social systems, and creative work. It may provide a service boundary, implementation pattern, experiment, archive, or reusable idea for related repositories. Treat repositories as technical dependencies only where documented interfaces and verified project requirements support that relationship.
+## Boundaries
 
-**Quality and security note:** No obvious secret-like pattern was detected by the limited static scan; this is not a substitute for a security audit. No TODO/FIXME marker was detected in the scanned text files.
+This does not claim to be a durable data lake, Kafka replacement, object-store writer, ETL platform, distributed ingestion cluster, schema registry, stream processor, or production deployment. State is process-local and in memory. There is no S3/GCS/Azure adapter, persistence, authentication/RBAC, tenant isolation, retry queue, backpressure protocol, replication, HA, encryption-at-rest control, or external observability integration.
 
----
+The intended SKYCOIN4444 role is a small ingestion-validation/deduplication primitive or reference component. Production integration should connect validated events to a durable queue/object store and add schema governance, authorization, retries, observability, and operational controls.
 
-# Elixir Data Lake Ingester
+## License
 
-![GitHub stars](https://img.shields.io/github/stars/skylerblue333/Elixir-Data-Lake-Ingester?style=flat-square)
-![GitHub license](https://img.shields.io/github/license/skylerblue333/Elixir-Data-Lake-Ingester?style=flat-square)
-
-## 🌟 Overview
-**Elixir-Data-Lake-Ingester** is a professional-grade project within the **SkyCoin4444** ecosystem. It focuses on delivering high-value solutions in the domain of **Python**.
-
-## 🚀 Key Features
-- **Scalable Architecture**: Designed for enterprise-level growth and performance.
-- **Modern Standards**: Implements best practices for clean code and maintainability.
-- **Robust Integration**: Built to work seamlessly within modern cloud-native environments.
-
-## 🛠️ Technology Stack
-- **Primary Domain**: Python
-- **Ecosystem**: SkyCoin4444 Digital Platform
-
-## 📂 Structure
-The project is organized into a modular structure to ensure clarity and ease of development.
-
-## 👨‍💻 Author
-**Skyler Blue Spillers**
-*Professional Chess Player & Software Engineer*
-
----
-*Powered by SkyCoin4444*
+See `LICENSE`.
