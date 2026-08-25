@@ -7,7 +7,8 @@ defmodule SkyDataLake.Ingester do
 
   def new, do: %{events: %{}, order: []}
 
-  def ingest(state, source, payload) when is_map(state) and is_binary(source) and is_binary(payload) do
+  def ingest(state, source, payload)
+      when is_map(state) and is_binary(source) and is_binary(payload) do
     validate_source!(source)
     validate_payload!(payload)
 
@@ -17,7 +18,9 @@ defmodule SkyDataLake.Ingester do
       hash = :crypto.hash(:sha256, source <> <<0>> <> payload) |> Base.encode16(case: :lower)
 
       case Map.fetch(state.events, hash) do
-        {:ok, event} -> {:ok, :duplicate, event, state}
+        {:ok, event} ->
+          {:ok, :duplicate, event, state}
+
         :error ->
           event = %{id: hash, source: source, bytes: byte_size(payload), sha256: sha256(payload)}
           next = %{events: Map.put(state.events, hash, event), order: state.order ++ [hash]}
@@ -33,7 +36,8 @@ defmodule SkyDataLake.Ingester do
   def count(state), do: map_size(state.events)
 
   defp validate_source!(source) do
-    if source == "" or byte_size(source) > @max_source_bytes or not Regex.match?(~r/^[A-Za-z0-9_.:-]+$/, source) do
+    if source == "" or byte_size(source) > @max_source_bytes or
+         not Regex.match?(~r/^[A-Za-z0-9_.:-]+$/, source) do
       raise ArgumentError, "source must be 1-64 safe characters"
     end
   end
