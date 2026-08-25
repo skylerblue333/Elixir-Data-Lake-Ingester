@@ -1,5 +1,3 @@
-ExUnit.start()
-
 defmodule SkyDataLake.IngesterTest do
   use ExUnit.Case, async: true
   alias SkyDataLake.Ingester
